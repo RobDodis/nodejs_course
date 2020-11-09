@@ -21,7 +21,6 @@ const filterBy = (filterFields) => (row) => {
 class EventsService {
   filePath = path.resolve(__dirname, '..', 'storage', 'events.csv');
   formatOptions = { headers, writeHeaders: true, includeEndRowDelimiter: true };
-  lockQueue = [Promise.resolve()];
 
   async findAll(filterFields = []) {
     const events = await this.read();
