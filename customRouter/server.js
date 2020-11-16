@@ -26,6 +26,8 @@ class Server {
 
   constructor(transport) {
     this.#server = transport.createServer(this.#handleRequests.bind(this));
+    this.#setupRouteHandlers();
+
     return this;
   }
 
@@ -33,25 +35,13 @@ class Server {
     this.#server.listen(...args);
   }
 
-  get(path, controller) {
-    this.#map.get.set(path, controller);
-  }
-
-  post(path, controller) {
-    this.#map.post.set(path, controller);
-  }
-
-  put(path, controller) {
-    this.#map.put.set(path, controller);
-  }
-
-  delete(path, controller) {
-    this.#map.delete.set(path, controller);
-  }
-
-  patch(path, controller) {
-    this.#map.patch.set(path, controller);
-  }
+  #setupRouteHandlers = () => {
+    Object.keys(this.#map).forEach((method) => {
+      this[method] = (path, controller) => {
+        this.#map[method].set(path, controller);
+      };
+    });
+  };
 
   #handleRequests = async (req, res) => {
     try {
@@ -94,4 +84,3 @@ class Server {
 }
 
 module.exports = () => new Server(http);
-module.exports.Router;
