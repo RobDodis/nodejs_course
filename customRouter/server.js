@@ -25,7 +25,7 @@ class Server {
   };
 
   constructor(transport) {
-    this.#server = transport.createServer(this.#handleRequests.bind(this));
+    this.#server = transport.createServer(this.#handleRequests);
     this.#setupRouteHandlers();
 
     return this;
