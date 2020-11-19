@@ -1,14 +1,22 @@
+const logger = require('pino')();
+
 module.exports = {
   log(...args) {
-    console.log(...args);
+    console.info(...args);
+  },
+  info(...args) {
+    logger.info(...args);
+  },
+  trace(...args) {
+    logger.trace(...args);
   },
   warn(...args) {
-    console.warn(...args);
+    logger.warn(...args);
   },
   debug(...args) {
-    console.debug(...args);
+    logger.debug(...args);
   },
   error(...args) {
-    console.error(...args);
+    logger.error(...args);
   },
 };

@@ -1,8 +1,9 @@
-module.exports = (app) => {
+module.exports = (app, context) => {
   app.use(require('./events'));
 
   app.all('*', (req, res) => {
     res.type('json');
-    res.send(JSON.stringify({ message: 'Hello world!' }));
+    const requestId = context.getStore().get('requestId');
+    res.send(JSON.stringify({ message: 'Hello world!', requestId }));
   });
 };
