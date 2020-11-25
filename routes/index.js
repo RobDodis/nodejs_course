@@ -1,5 +1,6 @@
 module.exports = (app, context) => {
   app.use(require('./events'));
+  app.use(require('./users'));
 
   app.all('*', (req, res) => {
     res.type('json');
