@@ -1,4 +1,4 @@
-const { mapValidationErrors } = require('../services/validation');
+const { mapErrors } = require('../services/errors');
 
 class UserController {
   constructor(db) {
@@ -18,8 +18,8 @@ class UserController {
       res.json(user);
     } catch (error) {
       if (error.errors) {
-        return res.status(404).json({
-          details: mapValidationErrors(error.errors),
+        return res.status(400).json({
+          details: mapErrors(error.errors),
         });
       }
 

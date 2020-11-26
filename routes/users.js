@@ -7,9 +7,9 @@ const eventsRouter = (router, db) => {
     curl --request POST http://localhost:3030/users \
     --header 'Content-Type: application/json' \
     --data '{
-      "firstName": "New Event",
-      "lastName": "New York",
-      "email": "2020-11-24T19:34:59.746Z",
+      "firstName": "FirstName",
+      "lastName": "LastName",
+      "email": "2020-11-24T19:34:59.746Z"
     }'
   */
   router.post('/users', userController.create);
