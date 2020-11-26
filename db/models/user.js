@@ -2,10 +2,6 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static getOwnAttributes() {
-      return ['firstName', 'lastName', 'email', 'id'];
-    }
-
     static associate({ Event, UserEvent }) {
       User.hasMany(Event, { sourceKey: 'id', foreignKey: 'creatorId' });
       User.belongsToMany(Event, {

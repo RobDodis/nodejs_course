@@ -1,21 +1,21 @@
-const database = require('../models');
 const { NotFound } = require('../../services/errors');
 
 class EventsRepository {
-  constructor(db = database) {
+  constructor(db, userRepository) {
     this.db = db;
+    this.userRepository = userRepository;
   }
 
   async findAllEvents(params) {
     const { Event, User } = this.db;
 
     const query = {
-      attributes: Event.getOwnAttributes(),
+      attributes: this.getOwnAttributes(),
       include: [
         {
           model: User,
           as: 'participants',
-          attributes: User.getOwnAttributes(),
+          attributes: this.userRepository.getOwnAttributes(),
         },
       ],
     };
@@ -32,12 +32,12 @@ class EventsRepository {
   async getEvent(id) {
     const { Event, User } = this.db;
     const query = {
-      attributes: Event.getOwnAttributes(),
+      attributes: this.getOwnAttributes(),
       include: [
         {
           model: User,
           as: 'participants',
-          attributes: User.getOwnAttributes(),
+          attributes: this.userRepository.getOwnAttributes(),
         },
       ],
       where: {
@@ -107,10 +107,13 @@ class EventsRepository {
         returning: true,
       }
     );
-
     return {
       event,
     };
+  }
+
+  getOwnAttributes() {
+    return ['id', 'title', 'date', 'location', 'creatorId'];
   }
 }
 

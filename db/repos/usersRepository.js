@@ -1,7 +1,5 @@
-const database = require('../models');
-
 class UsersRepository {
-  constructor(db = database) {
+  constructor(db) {
     this.db = db;
   }
 
@@ -17,6 +15,10 @@ class UsersRepository {
   async delete(id) {
     const { User } = this.db;
     return await User.destroy({ where: { id } });
+  }
+
+  getOwnAttributes() {
+    return ['firstName', 'lastName', 'email', 'id'];
   }
 }
 

@@ -2,10 +2,6 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
-    static getOwnAttributes() {
-      return ['id', 'title', 'date', 'location', 'creatorId'];
-    }
-
     static associate({ User, UserEvent }) {
       Event.Creator = Event.belongsTo(User, {
         as: 'creator',

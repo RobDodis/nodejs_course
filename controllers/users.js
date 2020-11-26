@@ -1,8 +1,7 @@
 const { mapErrors } = require('../services/errors');
-const UsersRepository = require('../db/repos/usersRepository');
 
 class UserController {
-  constructor(usersRepository = new UsersRepository()) {
+  constructor(usersRepository) {
     this.usersRepository = usersRepository;
   }
 

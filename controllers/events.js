@@ -1,8 +1,7 @@
-const EventsRepository = require('../db/repos/eventsRepository');
 const { NotFound } = require('../services/errors');
 
 class EventController {
-  constructor(eventsRepository = new EventsRepository()) {
+  constructor(eventsRepository) {
     this.eventsRepository = eventsRepository;
   }
 
@@ -60,7 +59,7 @@ class EventController {
   update = async (req, res, next) => {
     const id = +req.params.eventId;
     try {
-      const event = await this.eventsRepository.updateOne(id, req.body);
+      const { event } = await this.eventsRepository.updateOne(id, req.body);
 
       if (!event) {
         return res.status(404).send(`Event ${id} Not found`);
@@ -68,10 +67,6 @@ class EventController {
 
       res.json(event);
     } catch (error) {
-      if (error instanceof NotFound) {
-        return res.status(404).send(error.message);
-      }
-
       next(error);
     }
   };
