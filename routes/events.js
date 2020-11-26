@@ -1,7 +1,6 @@
 const EventController = require('../controllers/events');
 
-const eventsRouter = (router, db) => {
-  const eventController = new EventController(db);
+const eventsRouter = (router, eventController) => {
   // curl --request GET http://localhost:3030/events
   router.get('/events', eventController.getList);
 
@@ -38,4 +37,4 @@ const eventsRouter = (router, db) => {
   return router;
 };
 
-module.exports = eventsRouter(require('express').Router(), require('../db/models'));
+module.exports = eventsRouter(require('express').Router(), new EventController());

@@ -5,6 +5,15 @@ const mapErrors = (errors) =>
     path,
   }));
 
+class NotFound extends Error {
+  constructor(message) {
+    super(message, id);
+    this.message = message;
+    this.name = 'NotFound';
+  }
+}
+
 module.exports = {
   mapErrors,
+  NotFound,
 };

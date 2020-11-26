@@ -1,20 +1,14 @@
 const { mapErrors } = require('../services/errors');
+const UsersRepository = require('../db/repos/usersRepository');
 
 class UserController {
-  constructor(db) {
-    this.db = db;
+  constructor(usersRepository = new UsersRepository()) {
+    this.usersRepository = usersRepository;
   }
 
   create = async (req, res, next) => {
-    const { User } = this.db;
-    const { firstName, lastName, email } = req.body;
     try {
-      const user = await User.create({
-        firstName,
-        lastName,
-        email,
-      });
-
+      const user = await this.usersRepository.create(req.body);
       res.json(user);
     } catch (error) {
       if (error.errors) {
@@ -22,17 +16,14 @@ class UserController {
           details: mapErrors(error.errors),
         });
       }
-
       next(error);
     }
   };
 
   delete = async (req, res, next) => {
-    const { User } = this.db;
     const id = +req.params.userId;
-
     try {
-      const deleted = await User.destroy({ where: { id } });
+      const deleted = await this.usersRepository.delete(id);
 
       if (deleted) {
         res.status(204).send('');

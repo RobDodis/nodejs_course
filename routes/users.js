@@ -1,8 +1,6 @@
 const UserController = require('../controllers/users');
 
-const eventsRouter = (router, db) => {
-  const userController = new UserController(db);
-
+const eventsRouter = (router, userController) => {
   /*
     curl --request POST http://localhost:3030/users \
     --header 'Content-Type: application/json' \
@@ -20,4 +18,4 @@ const eventsRouter = (router, db) => {
   return router;
 };
 
-module.exports = eventsRouter(require('express').Router(), require('../db/models'));
+module.exports = eventsRouter(require('express').Router(), new UserController());

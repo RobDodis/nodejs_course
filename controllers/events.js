@@ -1,55 +1,25 @@
+const EventsRepository = require('../db/repos/eventsRepository');
+const { NotFound } = require('../services/errors');
+
 class EventController {
-  constructor(db) {
-    this.db = db;
+  constructor(eventsRepository = new EventsRepository()) {
+    this.eventsRepository = eventsRepository;
   }
 
   getList = async (req, res, next) => {
-    const { Event, User } = this.db;
-    const location = req.query.location;
     try {
-      const query = {
-        attributes: Event.getOwnAttributes(),
-        include: [
-          {
-            model: User,
-            as: 'participants',
-            attributes: User.getOwnAttributes(),
-          },
-        ],
-      };
+      const events = await this.eventsRepository.findAllEvents(req.query);
 
-      if (location) {
-        query.where = {
-          location,
-        };
-      }
-
-      const events = await Event.findAll(query);
-
-      res.json({ events });
+      return res.json({ events });
     } catch (error) {
       next(error);
     }
   };
 
   getById = async (req, res, next) => {
-    const { Event, User } = this.db;
     const id = +req.params.eventId;
     try {
-      const query = {
-        attributes: Event.getOwnAttributes(),
-        include: [
-          {
-            model: User,
-            as: 'participants',
-            attributes: User.getOwnAttributes(),
-          },
-        ],
-        where: {
-          id,
-        },
-      };
-      const event = await Event.findOne(query);
+      const event = await this.eventsRepository.getEvent(id);
       if (event) {
         res.json({ data: event });
       } else {
@@ -61,11 +31,9 @@ class EventController {
   };
 
   delete = async (req, res, next) => {
-    const { Event } = this.db;
     const id = +req.params.eventId;
     try {
-      const deleted = await Event.destroy({ where: { id } });
-
+      const deleted = await this.eventsRepository.delete(id);
       if (deleted) {
         res.status(204).send('');
       } else {
@@ -77,68 +45,33 @@ class EventController {
   };
 
   create = async (req, res, next) => {
-    const { Event, User, UserEvent, sequelize } = this.db;
-    const { title, location, date, creatorId, participants } = req.body;
-    let transaction;
-
     try {
-      const owner = await User.findByPk(creatorId);
-
-      if (!owner) {
-        return res.status(404).send(`User ${creatorId} Not found`);
+      const event = await this.eventsRepository.create(req.body);
+      res.json(event);
+    } catch (error) {
+      if (error instanceof NotFound) {
+        return res.status(404).send(error.message);
       }
 
-      transaction = await sequelize.transaction();
-      const event = await Event.create({
-        title,
-        location,
-        date,
-        creatorId,
-      });
-
-      const userEventData = Array.from(new Set(participants.concat(creatorId))).map((userId) => ({
-        userId: +userId,
-        eventId: event.id,
-      }));
-
-      await UserEvent.bulkCreate(userEventData);
-      await transaction.commit();
-
-      res.json({
-        id: event.id,
-      });
-    } catch (error) {
-      await transaction.rollback();
       next(error);
     }
   };
 
   update = async (req, res, next) => {
-    const { Event, User, UserEvent, sequelize } = this.db;
     const id = +req.params.eventId;
-    const { title, location, date, participants } = req.body;
-
     try {
-      const [count, [event]] = await Event.update(
-        {
-          title,
-          location,
-          date,
-        },
-        {
-          where: {
-            id,
-          },
-          returning: true,
-        }
-      );
+      const event = await this.eventsRepository.updateOne(id, req.body);
 
-      if (count === 0) {
+      if (!event) {
         return res.status(404).send(`Event ${id} Not found`);
       }
 
       res.json(event);
     } catch (error) {
+      if (error instanceof NotFound) {
+        return res.status(404).send(error.message);
+      }
+
       next(error);
     }
   };
