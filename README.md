@@ -2,4 +2,7 @@
 
 ### How to start
 
-PORT=3030 node app.js -env=dev
+- `make run-db-image`
+- `npx sequelize-cli db:migrate`
+- `npx sequelize-cli db:seed:all`
+- `npm run start`
