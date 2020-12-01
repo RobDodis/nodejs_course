@@ -11,6 +11,10 @@ const DEFAULT_CONFIG = {
     DB_NAME: process.env.DB_NAME,
     DB_HOST: process.env.DB_HOST || '127.0.0.1',
     DB_PORT: process.env.DB_PORT,
+    REDIS_HOST: process.env.REDIS_HOST || '127.0.0.1',
+    REDIS_PORT: process.env.REDIS_PORT,
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+    REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
   },
   test: {
     NODE_ENV,
@@ -20,6 +24,10 @@ const DEFAULT_CONFIG = {
     DB_NAME: process.env.DB_NAME,
     DB_HOST: process.env.DB_HOST || '127.0.0.1',
     DB_PORT: process.env.DB_PORT,
+    REDIS_HOST: process.env.REDIS_HOST || '127.0.0.1',
+    REDIS_PORT: process.env.REDIS_PORT,
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+    REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
   },
   production: {
     NODE_ENV,
@@ -29,6 +37,10 @@ const DEFAULT_CONFIG = {
     DB_NAME: process.env.DB_NAME,
     DB_HOST: process.env.DB_HOST || '127.0.0.1',
     DB_PORT: process.env.DB_PORT,
+    REDIS_HOST: process.env.REDIS_HOST || '127.0.0.1',
+    REDIS_PORT: process.env.REDIS_PORT,
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+    REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
   },
 };
 
