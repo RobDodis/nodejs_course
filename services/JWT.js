@@ -62,7 +62,6 @@ const verifyAccessToken = async (req, res, next) => {
     const token = bearerToken[1];
     const payload = await jwtVerifyAsync(token, config.ACCESS_TOKEN_SECRET);
     const blacklisted = !!cache.get(payload.jwg);
-    g(payload, blacklisted);
     if (payload.refresh || blacklisted) {
       return next(createError.Unauthorized());
     }
