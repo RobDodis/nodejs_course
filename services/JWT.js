@@ -2,7 +2,7 @@ const util = require('util');
 const JWT = require('jsonwebtoken');
 const createError = require('http-errors');
 const config = require('../config');
-const storage = require('./storage');
+const cache = require('./cache');
 
 const jwtSignAsync = util.promisify(JWT.sign);
 const jwtVerifyAsync = util.promisify(JWT.verify);
@@ -50,7 +50,7 @@ const signRefreshToken = async (userId, jwtgroup) => {
 
 const revokeToken = (token) => {
   const payload = JWT.decode(token);
-  storage.set(payload.jwg, true, payload.exp * 1000 - Date.now());
+  cache.set(payload.jwg, true, payload.exp * 1000 - Date.now());
 };
 
 const verifyAccessToken = async (req, res, next) => {
@@ -61,8 +61,8 @@ const verifyAccessToken = async (req, res, next) => {
     const bearerToken = authHeader.split(' ');
     const token = bearerToken[1];
     const payload = await jwtVerifyAsync(token, config.ACCESS_TOKEN_SECRET);
-    const blacklisted = !!storage.get(payload.jwg);
-
+    const blacklisted = !!cache.get(payload.jwg);
+    g(payload, blacklisted);
     if (payload.refresh || blacklisted) {
       return next(createError.Unauthorized());
     }
@@ -78,7 +78,7 @@ const verifyAccessToken = async (req, res, next) => {
 const verifyRefreshToken = async (refreshToken) => {
   try {
     const payload = await jwtVerifyAsync(refreshToken, config.REFRESH_TOKEN_SECRET);
-    const blacklisted = !!storage.get(payload.jwg);
+    const blacklisted = !!cache.get(payload.jwg);
 
     if (!payload.refresh || blacklisted) {
       throw createError.Unauthorized();

@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('./config');
 const logger = require('./logger');
-require('./services/storage');
 const requestContextMiddleware = require('./middlewares/requestContextMiddleware');
 const requestLoggerMiddleware = require('./middlewares/requestLoggerMiddleware');
 const errorLoggerMiddleware = require('./middlewares/errorLoggerMiddleware');
