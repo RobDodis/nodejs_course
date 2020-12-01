@@ -1,7 +1,7 @@
 include .env
 
-.PHONY: run-db-image
-run-db-image:
+.PHONY: run-db
+run-db:
 	@ echo "start"
 	@ docker run --name db-container -e POSTGRES_DB=$(DB_NAME) -e POSTGRES_USER=$(DB_USER) -e POSTGRES_PASSWORD=$(DB_PASSWORD) -p $(DB_PORT):$(DB_PORT) -d postgres:11.5
 	@ echo "finish"
