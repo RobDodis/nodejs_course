@@ -8,8 +8,8 @@ const jwtSignAsync = util.promisify(JWT.sign);
 const jwtVerifyAsync = util.promisify(JWT.verify);
 
 // seconds
-const expiresInAccessToken = 100000;
-const expiresInRefreshToken = 300000;
+const expiresInAccessToken = 10;
+const expiresInRefreshToken = 30;
 
 const signAccessToken = async (userId, jwtgroup) => {
   try {
