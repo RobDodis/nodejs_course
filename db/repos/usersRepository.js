@@ -3,6 +3,13 @@ class UsersRepository {
     this.db = db;
   }
 
+  async findOneByEmail(email) {
+    const { User } = this.db;
+    return await User.findOne({
+      where: { email },
+    });
+  }
+
   async create({ firstName, lastName, email }) {
     const { User } = this.db;
     return await User.create({
